@@ -1,5 +1,6 @@
 import React from "react";
 import ReactECharts from "echarts-for-react";
+import { Navbar, Container } from "react-bootstrap";
 
 const App = () => {
   const option = {
@@ -19,7 +20,13 @@ const App = () => {
   };
 
   return (
-    <div>
+    <div className="bg-gray">
+      <Navbar>
+        <Container>
+          <Navbar.Brand href="#home">E-Commerce Dashboard</Navbar.Brand>
+        </Container>
+      </Navbar>
+
       <ReactECharts option={option} />
     </div>
   );
