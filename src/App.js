@@ -1,6 +1,10 @@
 import React from "react";
-import ReactECharts from "echarts-for-react";
-import { Navbar, Container } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
+import AreaChart from "./components/AreaChart";
+import ColumnChart from "./components/ColumnChart";
+import Header from "./components/Header";
+import LineChart from "./components/LineChart";
+import StackedColumnChart from "./components/StackedColumnChart";
 
 const App = () => {
   const option = {
@@ -21,13 +25,18 @@ const App = () => {
 
   return (
     <div className="bg-gray">
-      <Navbar>
-        <Container>
-          <Navbar.Brand href="#home">E-Commerce Dashboard</Navbar.Brand>
-        </Container>
-      </Navbar>
+      <Header />
 
-      <ReactECharts option={option} />
+      <Row>
+        <Col>
+          <AreaChart />
+        </Col>
+        <Col>
+          <LineChart />
+        </Col>
+      </Row>
+      <StackedColumnChart />
+      <ColumnChart />
     </div>
   );
 };
