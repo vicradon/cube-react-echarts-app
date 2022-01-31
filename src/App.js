@@ -9,7 +9,7 @@ import cubejs from "@cubejs-client/core";
 
 export const cubejsApi = cubejs(
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NDMzNDM1NjUsImV4cCI6MTY0MzQyOTk2NX0.iQlW1J6hYS2Lk_IO5sg-o3zQvNCZzirjqLLOFd6Cjmo",
-  { apiUrl: "http://localhost:4000/cubejs-api/v1" }
+  { apiUrl: `${process.env.REACT_APP_CUBE_ROOT_API}/cubejs-api/v1` }
 );
 
 const App = () => {

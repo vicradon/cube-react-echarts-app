@@ -1,12 +1,15 @@
-import React from "react";
+import { useState } from "react";
+import { Card, Form, Button } from "react-bootstrap";
 import ReactECharts from "echarts-for-react";
 import { useCubeQuery } from "@cubejs-client/react";
 import dayjs from "dayjs";
 import Loader from "./Loader";
-import { Card } from "react-bootstrap";
 
 function StackedBarChart() {
-  const { resultSet, isLoading, error, progress } = useCubeQuery({
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+
+  const [jsonQuery, setJSONQuery] = useState({
     measures: ["Orders.count"],
     timeDimensions: [
       {
@@ -21,6 +24,7 @@ function StackedBarChart() {
     dimensions: ["Orders.status"],
     filters: [],
   });
+  const { resultSet, isLoading, error, progress } = useCubeQuery(jsonQuery);
 
   if (error) {
     return <p>{error.toString()}</p>;
@@ -101,10 +105,61 @@ function StackedBarChart() {
     ],
   };
 
+  const updateDate = (event) => {
+    event.preventDefault();
+
+    setJSONQuery((prevJSONQuery) => {
+      return {
+        ...prevJSONQuery,
+        filters: [
+          {
+            member: "Orders.createdAt",
+            operator: "inDateRange",
+            values: [startDate, endDate],
+          },
+        ],
+      };
+    });
+  };
+
   return (
     <Card className="m-4">
       <Card.Body>
-        <Card.Title>Orders by Status Over Time</Card.Title>
+        <div className="d-flex align-items-center justify-content-between my-4">
+          <Card.Title>Orders by Status Over Time</Card.Title>
+          <Form
+            onSubmit={updateDate}
+            className="d-flex align-items-center  gap-4"
+          >
+            <div className="d-flex gap-2 align-items-center">
+              <div>
+                <label htmlFor="startDate">Start Date</label>
+              </div>
+
+              <input
+                id="startDate"
+                name="start-date"
+                value={startDate}
+                onChange={({ target }) => setStartDate(target.value)}
+                type="date"
+              />
+            </div>
+            <div className="d-flex gap-2 align-items-center">
+              <div>
+                <label htmlFor="endDate">End Date</label>
+              </div>
+              <input
+                id="endDate"
+                name="end-date"
+                value={endDate}
+                onChange={({ target }) => setEndDate(target.value)}
+                type="date"
+              />
+            </div>
+            <Button type="submit">Set date</Button>
+          </Form>
+        </div>
+
         <ReactECharts option={options} />
       </Card.Body>
     </Card>

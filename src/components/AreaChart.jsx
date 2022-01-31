@@ -35,7 +35,6 @@ function AreaChart() {
   }
 
   const workingData = resultSet.loadResponse.results[0].data;
-  console.log(workingData);
   const userCount = workingData.map((item) => item["Users.count"]);
   const userCreationDate = workingData.map((item) =>
     dayjs(item["Users.createdAt.year"]).format("YYYY")
