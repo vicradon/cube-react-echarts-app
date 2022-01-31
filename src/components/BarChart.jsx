@@ -3,20 +3,15 @@ import ReactECharts from "echarts-for-react";
 import { useCubeQuery } from "@cubejs-client/react";
 import Loader from "./Loader";
 import { Card } from "react-bootstrap";
-import dayjs from "dayjs";
 
-function AreaChart() {
+function BarChart() {
   const { resultSet, isLoading, error, progress } = useCubeQuery({
-    measures: ["Users.count"],
-    timeDimensions: [
-      {
-        dimension: "Users.createdAt",
-        granularity: "year",
-      },
-    ],
+    measures: ["Orders.count"],
+    timeDimensions: [],
     order: {
-      "Users.createdAt": "asc",
+      "Orders.count": "desc",
     },
+    dimensions: ["ProductCategories.name"],
   });
 
   if (error) {
@@ -35,32 +30,23 @@ function AreaChart() {
   }
 
   const workingData = resultSet.loadResponse.results[0].data;
-  console.log(workingData);
-  const userCount = workingData.map((item) => item["Users.count"]);
-  const userCreationDate = workingData.map((item) =>
-    dayjs(item["Users.createdAt.year"]).format("YYYY")
+  const productCategoryNames = workingData.map(
+    (item) => item["ProductCategories.name"]
   );
+  const orderCount = workingData.map((item) => item["Orders.count"]);
 
   const options = {
-    legend: {
-      data: ["User count"],
-    },
-    tooltip: {
-      trigger: "axis",
-      axisPointer: {
-        type: "shadow",
-      },
-    },
     xAxis: {
-      data: userCreationDate,
+      type: "category",
+      data: productCategoryNames,
     },
-    yAxis: {},
+    yAxis: {
+      type: "value",
+    },
     series: [
       {
-        name: "User count",
-        data: userCount,
-        type: "line",
-        areaStyle: {},
+        data: orderCount,
+        type: "bar",
       },
     ],
   };
@@ -68,11 +54,11 @@ function AreaChart() {
   return (
     <Card className="m-4">
       <Card.Body>
-        <Card.Title>User Trend</Card.Title>
+        <Card.Title>Orders by Product Category Names</Card.Title>
         <ReactECharts option={options} />
       </Card.Body>
     </Card>
   );
 }
 
-export default AreaChart;
+export default BarChart;

@@ -1,43 +1,39 @@
 import React from "react";
-import { Col, Row } from "react-bootstrap";
+import { Col, Row, Navbar, Container } from "react-bootstrap";
 import AreaChart from "./components/AreaChart";
-import ColumnChart from "./components/ColumnChart";
-import Header from "./components/Header";
+import BarChart from "./components/BarChart";
 import LineChart from "./components/LineChart";
-import StackedColumnChart from "./components/StackedColumnChart";
+import StackedBarChart from "./components/StackedBarChart";
+import { CubeProvider } from "@cubejs-client/react";
+import cubejs from "@cubejs-client/core";
+
+export const cubejsApi = cubejs(
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NDMzNDM1NjUsImV4cCI6MTY0MzQyOTk2NX0.iQlW1J6hYS2Lk_IO5sg-o3zQvNCZzirjqLLOFd6Cjmo",
+  { apiUrl: "http://localhost:4000/cubejs-api/v1" }
+);
 
 const App = () => {
-  const option = {
-    xAxis: {
-      type: "category",
-      data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-    },
-    yAxis: {
-      type: "value",
-    },
-    series: [
-      {
-        data: [120, 200, 150, 80, 70, 110, 130],
-        type: "bar",
-      },
-    ],
-  };
-
   return (
-    <div className="bg-gray">
-      <Header />
+    <CubeProvider cubejsApi={cubejsApi}>
+      <div className="bg-gray">
+        <Navbar>
+          <Container>
+            <Navbar.Brand href="#home">E-Commerce Dashboard</Navbar.Brand>
+          </Container>
+        </Navbar>
 
-      <Row>
-        <Col>
-          <AreaChart />
-        </Col>
-        <Col>
-          <LineChart />
-        </Col>
-      </Row>
-      <StackedColumnChart />
-      <ColumnChart />
-    </div>
+        <Row>
+          <Col>
+            <AreaChart />
+          </Col>
+          <Col>
+            <LineChart />
+          </Col>
+        </Row>
+        <StackedBarChart />
+        <BarChart />
+      </div>
+    </CubeProvider>
   );
 };
 
